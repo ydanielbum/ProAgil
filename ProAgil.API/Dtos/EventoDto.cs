@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,7 +9,7 @@ namespace ProAgil.API.Dtos
         
         public int Id { get; set; }
         public string Local { get; set; }
-        public string DataEvento { get; set; }
+        public DateTime DataEvento { get; set; }
         
         [Required]
         public string Tema { get; set; }

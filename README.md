@@ -1,6 +1,6 @@
 # ProAgil
 
-Projeto do Curso de .NET Core + Angular
+Projeto de Estudo
 
 * Asp.NET Core 2.2 WEB API
 * Entity Framework Core 2.2

@@ -28,6 +28,8 @@ export class EventosComponent implements OnInit {
   mostrarImagem = false;
   modalRef: BsModalRef;
   registerForm: FormGroup;
+  file: File;
+  dataAtual: string;
 
 
   constructor(
@@ -56,6 +58,8 @@ export class EventosComponent implements OnInit {
       if (this.modoEdicao){
         this.evento = Object.assign({id: this.evento.id}, this.registerForm.value);
 
+        this.uploadImagem();
+
         this.eventoService.putEvento(this.evento).subscribe(
           () => {
             template.hide();
@@ -66,7 +70,10 @@ export class EventosComponent implements OnInit {
           }
         );
       }else{
-        this.evento = Object.assign({}, this.registerForm.value);
+        this.evento = Object.assign({}, this.registerForm.value); 
+
+        this.uploadImagem();
+
 
         this.eventoService.postEvento(this.evento).subscribe(
           (novoEvento: Evento) => {
@@ -78,6 +85,26 @@ export class EventosComponent implements OnInit {
           }
         );
       }
+    }
+  }
+
+  uploadImagem(){
+    const nomeArquivo = this.evento.imagemURL.split('\\', 3);
+    this.evento.imagemURL = nomeArquivo[2];
+
+    this.eventoService.postUpload(this.file, nomeArquivo[2]) .subscribe(
+      () => {
+        this.dataAtual = new Date().getMilliseconds().toString();
+        this.getEventos();
+      }
+    );
+  }
+
+  onFileChange(event){
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length){
+      this.file = event.target.files;
     }
   }
 
@@ -119,7 +146,8 @@ export class EventosComponent implements OnInit {
 
   editarEvento(template: any, evento: Evento){
     this.openModal(template);
-    this.evento = evento;
+    this.evento = Object.assign({}, evento);
+    this.evento.imagemURL = '';
     this.modoEdicao = true;
     this.tituloEvento = this.evento.tema;
     this.registerForm.patchValue(this.evento);

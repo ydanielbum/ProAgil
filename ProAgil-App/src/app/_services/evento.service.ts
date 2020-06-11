@@ -27,6 +27,14 @@ constructor(private http: HttpClient) { }
     return this.http.post(this.baseURL, evento);
   }
 
+  postUpload(file: File, filename: string) {
+    const fileToUpload = file[0] as File;
+    const formData  = new FormData();
+    formData.append('file', fileToUpload, filename);
+
+    return this.http.post(`${this.baseURL}/upload`, formData);
+  }
+
   putEvento(evento: Evento){
     return this.http.put(`${this.baseURL}/${evento.id}`, evento);
   }
